@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#11172b" />
+  <meta name="description" content="MARO — لوحة تحكم عربية لإدارة الكتالوج والمستخدمين والأسعار" />
+  <title>MARO Control — لوحة التحكم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <a class="brand" href="#" data-view="overview" aria-label="MARO الرئيسية">
+          <span class="brand-mark"><span></span><span></span><span></span></span>
+          <span class="brand-name">MARO<span>control</span></span>
+        </a>
+        <button class="icon-button sidebar-close" id="sidebarClose" aria-label="إغلاق القائمة"><i data-lucide="x"></i></button>
+      </div>
+      <div class="workspace-switcher">
+        <span class="workspace-icon"><i data-lucide="store"></i></span>
+        <span><strong>متجر مارو</strong><small>لوحة الإدارة</small></span>
+        <i class="chevron" data-lucide="chevrons-up-down"></i>
+      </div>
+      <nav class="main-nav" aria-label="التنقل الرئيسي">
+        <p class="nav-label">الرئيسية</p>
+        <button class="nav-item active" data-view="overview"><i data-lucide="layout-dashboard"></i><span>نظرة عامة</span></button>
+        <button class="nav-item" data-view="products"><i data-lucide="package-search"></i><span>المنتجات</span><b class="nav-count">128</b></button>
+        <button class="nav-item" data-view="categories"><i data-lucide="folders"></i><span>الأقسام</span></button>
+        <p class="nav-label nav-label-spaced">الإدارة</p>
+        <button class="nav-item" data-view="users"><i data-lucide="users-round"></i><span>المستخدمون</span></button>
+        <button class="nav-item" data-view="settings"><i data-lucide="settings-2"></i><span>الإعدادات</span></button>
+      </nav>
+      <div class="sidebar-help">
+        <div class="help-spark"><i data-lucide="sparkles"></i></div>
+        <strong>تحتاج مساعدة؟</strong>
+        <p>تعرف على طريقة إدارة كتالوجك في دقائق.</p>
+        <button class="help-link" data-action="show-toast">فتح الدليل <i data-lucide="arrow-up-left"></i></button>
+      </div>
+      <div class="sidebar-profile" data-action="profile">
+        <div class="avatar avatar-purple">س</div>
+        <div class="profile-copy"><strong>سارة أحمد</strong><small>مديرة المتجر</small></div>
+        <i data-lucide="more-horizontal"></i>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-start">
+          <button class="icon-button mobile-menu" id="mobileMenu" aria-label="فتح القائمة"><i data-lucide="menu"></i></button>
+          <div class="breadcrumb"><span>لوحة التحكم</span><i data-lucide="chevron-left"></i><strong id="breadcrumbCurrent">نظرة عامة</strong></div>
+        </div>
+        <div class="topbar-actions">
+          <label class="top-search" aria-label="بحث في اللوحة">
+            <i data-lucide="search"></i>
+            <input id="globalSearch" type="search" placeholder="ابحث عن منتج أو قسم..." />
+            <kbd>⌘ K</kbd>
+          </label>
+          <button class="icon-button theme-button" id="themeToggle" aria-label="تبديل الوضع الليلي"><i data-lucide="moon"></i></button>
+          <button class="icon-button notification-button" data-action="show-toast" aria-label="الإشعارات"><i data-lucide="bell"></i><span></span></button>
+          <button class="top-profile" data-action="profile"><span class="avatar avatar-purple">س</span><i data-lucide="chevron-down"></i></button>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <section class="view-panel active" data-panel="overview">
+          <div class="page-heading">
+            <div><p class="eyebrow">الأربعاء، ٤ نوفمبر ٢٠٢٦</p><h1>صباح الخير، سارة <span class="wave">✦</span></h1><p class="muted">هذه لمحة سريعة عن كل ما يحدث في متجرك اليوم.</p></div>
+            <div class="heading-actions"><button class="button button-ghost" data-action="export"><i data-lucide="download"></i> تصدير التقرير</button><button class="button button-primary" data-action="add-product"><i data-lucide="plus"></i> إضافة منتج</button></div>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon blue"><i data-lucide="package-check"></i></span><span class="trend positive"><i data-lucide="trending-up"></i> 12.5%</span></div><p>إجمالي المنتجات</p><strong>128</strong><small>مقارنة بالشهر الماضي</small></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon purple"><i data-lucide="layers-3"></i></span><span class="trend positive"><i data-lucide="trending-up"></i> 4.2%</span></div><p>الأقسام النشطة</p><strong>12</strong><small>قسمًا منظمًا في الكتالوج</small></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon orange"><i data-lucide="boxes"></i></span><span class="trend positive"><i data-lucide="trending-up"></i> 8.1%</span></div><p>إجمالي المخزون</p><strong>8,249</strong><small>وحدة متاحة للبيع</small></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon red"><i data-lucide="alert-triangle"></i></span><span class="trend negative"><i data-lucide="arrow-down-left"></i> يحتاج انتباه</span></div><p>مخزون منخفض</p><strong>07</strong><small>منتجات تحتاج إعادة تعبئة</small></article>
+          </div>
+          <div class="feature-strip"><div class="feature-copy"><span class="mini-badge"><i data-lucide="zap"></i> نصيحة اليوم</span><h2>خلّ كتالوجك يشتغل عنك.</h2><p>أضف المنتجات بصور واضحة وتفاصيل دقيقة لتحصل على كتالوج أسهل للبحث وأكثر احترافية.</p><div class="progress-line"><span style="width: 72%"></span></div><small>72% من بيانات الكتالوج مكتملة</small></div><div class="feature-actions"><button class="button button-light" data-action="add-category"><i data-lucide="folder-plus"></i> أضف قسمًا</button><button class="button button-outline-light" data-action="profile"><i data-lucide="user-round-pen"></i> حدّث ملفك</button></div><div class="feature-pattern"></div></div>
+          <div class="dashboard-grid">
+            <section class="panel recent-panel"><div class="panel-heading"><div><h2>المنتجات المضافة حديثًا</h2><p>آخر المنتجات التي أضفتها إلى الكتالوج.</p></div><button class="text-button" data-view="products">عرض الكل <i data-lucide="arrow-left"></i></button></div><div class="table-wrap"><table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الحالة</th><th></th></tr></thead><tbody id="recentProductsBody"></tbody></table></div></section>
+            <section class="panel category-panel"><div class="panel-heading"><div><h2>توزيع الأقسام</h2><p>نسبة المنتجات في كل قسم.</p></div><button class="icon-button small" data-action="add-category" aria-label="إضافة قسم"><i data-lucide="plus"></i></button></div><div class="donut-wrap"><div class="donut-chart"><div><strong>128</strong><small>منتج</small></div></div><div class="category-legend"><div><span class="legend-dot dot-blue"></span><span>أزياء</span><b>42%</b></div><div><span class="legend-dot dot-purple"></span><span>إكسسوارات</span><b>27%</b></div><div><span class="legend-dot dot-orange"></span><span>أحذية</span><b>18%</b></div><div><span class="legend-dot dot-gray"></span><span>أخرى</span><b>13%</b></div></div></div><div class="category-total"><span>القسم الأكثر نشاطًا</span><strong>الأزياء <small>54 منتج</small></strong></div></section>
+          </div>
+        </section>
+
+        <section class="view-panel" data-panel="products">
+          <div class="page-heading compact"><div><p class="eyebrow">الكتالوج / إدارة المنتجات</p><h1>المنتجات</h1><p class="muted">أضف منتجاتك، عدّل أسعارها، وتابع مخزونك من مكان واحد.</p></div><button class="button button-primary" data-action="add-product"><i data-lucide="plus"></i> إضافة منتج</button></div>
+          <div class="toolbar panel"><div class="toolbar-search"><i data-lucide="search"></i><input id="productSearch" type="search" placeholder="ابحث بالاسم أو رمز المنتج..." /></div><select id="categoryFilter"><option value="all">كل الأقسام</option><option>أزياء</option><option>إكسسوارات</option><option>أحذية</option><option>عناية</option></select><select id="statusFilter"><option value="all">كل الحالات</option><option>نشط</option><option>مسودة</option><option>منخفض المخزون</option></select><button class="button button-ghost" data-action="export"><i data-lucide="download"></i> تصدير</button></div>
+          <section class="panel product-list-panel"><div class="list-meta"><div><strong id="productCount">128 منتج</strong><span>محدّث الآن</span></div><div class="view-switch"><button class="active" aria-label="عرض القائمة"><i data-lucide="list"></i></button><button aria-label="عرض الشبكة"><i data-lucide="grid-2x2"></i></button></div></div><div class="table-wrap"><table class="products-table"><thead><tr><th><input type="checkbox" aria-label="تحديد الكل" /></th><th>المنتج</th><th>رمز المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الحالة</th><th>آخر تعديل</th><th></th></tr></thead><tbody id="productsBody"></tbody></table></div><div class="pagination"><span>عرض 1–8 من 128 منتج</span><div><button class="page-number active">1</button><button class="page-number">2</button><button class="page-number">3</button><button class="page-number"><i data-lucide="chevron-left"></i></button></div></div></section>
+        </section>
+
+        <section class="view-panel" data-panel="categories">
+          <div class="page-heading compact"><div><p class="eyebrow">الكتالوج / التنظيم</p><h1>الأقسام</h1><p class="muted">رتّب منتجاتك في مجموعات سهلة التصفح.</p></div><button class="button button-primary" data-action="add-category"><i data-lucide="plus"></i> إضافة قسم</button></div>
+          <div class="category-cards" id="categoryCards"></div>
+          <section class="panel table-panel"><div class="panel-heading"><div><h2>كل الأقسام</h2><p>تعديل سريع على أسماء الأقسام ووصفها.</p></div><div class="toolbar-search small-search"><i data-lucide="search"></i><input type="search" placeholder="ابحث عن قسم..." /></div></div><div class="table-wrap"><table><thead><tr><th>القسم</th><th>الوصف</th><th>المنتجات</th><th>الحالة</th><th>آخر تعديل</th><th></th></tr></thead><tbody id="categoriesBody"></tbody></table></div></section>
+        </section>
+
+        <section class="view-panel" data-panel="users">
+          <div class="page-heading compact"><div><p class="eyebrow">الإدارة / الوصول</p><h1>المستخدمون والصلاحيات</h1><p class="muted">تحكم بمن يستطيع تعديل الكتالوج ومتابعة المتجر.</p></div><button class="button button-primary" data-action="add-user"><i data-lucide="user-plus"></i> إضافة مستخدم</button></div>
+          <div class="user-summary"><div class="user-summary-item"><span class="stat-icon blue"><i data-lucide="users-round"></i></span><div><small>إجمالي المستخدمين</small><strong>08</strong></div></div><div class="user-summary-item"><span class="stat-icon green"><i data-lucide="user-check"></i></span><div><small>نشطون الآن</small><strong>06</strong></div></div><div class="user-summary-item"><span class="stat-icon orange"><i data-lucide="shield-check"></i></span><div><small>مديرو المتجر</small><strong>02</strong></div></div></div>
+          <section class="panel table-panel"><div class="panel-heading"><div><h2>فريق المتجر</h2><p>الأشخاص الذين لديهم صلاحية الوصول إلى لوحة التحكم.</p></div><div class="toolbar-search small-search"><i data-lucide="search"></i><input type="search" placeholder="ابحث عن مستخدم..." /></div></div><div class="table-wrap"><table><thead><tr><th>المستخدم</th><th>الدور</th><th>آخر دخول</th><th>الحالة</th><th></th></tr></thead><tbody id="usersBody"></tbody></table></div></section>
+        </section>
+
+        <section class="view-panel" data-panel="settings">
+          <div class="page-heading compact"><div><p class="eyebrow">الإدارة / التفضيلات</p><h1>الإعدادات</h1><p class="muted">خصص طريقة عمل لوحة التحكم بما يناسب فريقك.</p></div></div>
+          <div class="settings-grid"><section class="panel settings-card"><div class="settings-icon"><i data-lucide="store"></i></div><div><h2>بيانات المتجر</h2><p>اسم المتجر، العملة، والمنطقة الزمنية.</p></div><button class="text-button" data-action="show-toast">تعديل <i data-lucide="arrow-left"></i></button></section><section class="panel settings-card"><div class="settings-icon purple-bg"><i data-lucide="shield-check"></i></div><div><h2>الأمان والصلاحيات</h2><p>تسجيل الدخول والأدوار المسموحة.</p></div><button class="text-button" data-action="show-toast">فتح <i data-lucide="arrow-left"></i></button></section><section class="panel settings-card"><div class="settings-icon orange-bg"><i data-lucide="bell-ring"></i></div><div><h2>الإشعارات</h2><p>اختر ما تريد أن يصلك من تنبيهات.</p></div><button class="text-button" data-action="show-toast">تعديل <i data-lucide="arrow-left"></i></button></section></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="productModal" aria-hidden="true"><div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="productModalTitle"><div class="modal-head"><div><span class="modal-kicker">الكتالوج</span><h2 id="productModalTitle">إضافة منتج جديد</h2><p>أدخل بيانات المنتج ليظهر في الكتالوج مباشرة.</p></div><button class="icon-button close-modal" data-close="productModal" aria-label="إغلاق"><i data-lucide="x"></i></button></div><form id="productForm"><div class="form-grid"><label class="field field-full"><span>اسم المنتج <em>*</em></span><input name="name" required placeholder="مثال: حقيبة جلدية كلاسيكية" /></label><label class="field"><span>رمز المنتج <em>*</em></span><input name="sku" required placeholder="MAR-129" /></label><label class="field"><span>القسم</span><select name="category"><option>أزياء</option><option>إكسسوارات</option><option>أحذية</option><option>عناية</option></select></label><label class="field"><span>السعر الأساسي <em>*</em></span><div class="input-suffix"><input name="price" type="number" min="0" required placeholder="0.00" /><b>ر.س</b></div></label><label class="field"><span>سعر الخصم</span><div class="input-suffix"><input name="sale" type="number" min="0" placeholder="اختياري" /><b>ر.س</b></div></label><label class="field"><span>المخزون <em>*</em></span><input name="stock" type="number" min="0" required placeholder="0" /></label><label class="field field-full"><span>وصف مختصر</span><textarea name="description" rows="2" placeholder="اكتب وصفًا بسيطًا يساعد العميل على فهم المنتج..."></textarea></label><label class="field field-full"><span>تفاصيل المنتج</span><textarea name="details" rows="2" placeholder="المقاس، اللون، الخامة، أو أي تفاصيل إضافية..."></textarea></label><label class="field field-full"><span>صورة المنتج</span><div class="upload-box" id="uploadBox"><input name="image" id="imageInput" type="file" accept="image/*" /><div class="upload-icon"><i data-lucide="image-plus"></i></div><strong>اسحب الصورة هنا أو <u>تصفح الملفات</u></strong><small>PNG أو JPG، بحد أقصى 5MB</small></div><img class="image-preview" id="imagePreview" alt="معاينة صورة المنتج" /></label></div><div class="modal-foot"><button type="button" class="button button-ghost close-modal" data-close="productModal">إلغاء</button><button type="submit" class="button button-primary"><i data-lucide="check"></i> حفظ المنتج</button></div></form></div></div>
+
+  <div class="modal-backdrop" id="categoryModal" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><div><span class="modal-kicker">التنظيم</span><h2>إضافة قسم جديد</h2><p>اجعل الوصول إلى منتجاتك أبسط.</p></div><button class="icon-button close-modal" data-close="categoryModal" aria-label="إغلاق"><i data-lucide="x"></i></button></div><form id="categoryForm"><div class="form-grid"><label class="field field-full"><span>اسم القسم <em>*</em></span><input name="name" required placeholder="مثال: العروض الموسمية" /></label><label class="field field-full"><span>وصف القسم</span><textarea name="description" rows="3" placeholder="وصف مختصر للقسم..."></textarea></label><label class="field"><span>لون القسم</span><select name="color"><option value="blue">أزرق</option><option value="purple">بنفسجي</option><option value="orange">برتقالي</option><option value="green">أخضر</option></select></label></div><div class="modal-foot"><button type="button" class="button button-ghost close-modal" data-close="categoryModal">إلغاء</button><button type="submit" class="button button-primary"><i data-lucide="folder-plus"></i> حفظ القسم</button></div></form></div></div>
+
+  <div class="modal-backdrop" id="userModal" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><div><span class="modal-kicker">الوصول</span><h2>إضافة مستخدم</h2><p>امنح عضوًا جديدًا وصولًا مناسبًا للوحة.</p></div><button class="icon-button close-modal" data-close="userModal" aria-label="إغلاق"><i data-lucide="x"></i></button></div><form id="userForm"><div class="form-grid"><label class="field field-full"><span>الاسم الكامل <em>*</em></span><input name="name" required placeholder="مثال: محمد خالد" /></label><label class="field field-full"><span>البريد الإلكتروني <em>*</em></span><input name="email" type="email" required placeholder="name@example.com" /></label><label class="field"><span>الدور</span><select name="role"><option>محرر المنتجات</option><option>مشاهد</option><option>مدير المتجر</option></select></label><label class="field"><span>الحالة</span><select name="status"><option>دعوة معلقة</option><option>نشط</option></select></label></div><div class="modal-foot"><button type="button" class="button button-ghost close-modal" data-close="userModal">إلغاء</button><button type="submit" class="button button-primary"><i data-lucide="send"></i> إرسال الدعوة</button></div></form></div></div>
+
+  <div class="modal-backdrop" id="profileModal" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><div><span class="modal-kicker">حسابي</span><h2>بيانات الملف الشخصي</h2><p>هذه البيانات تظهر لأعضاء فريق المتجر.</p></div><button class="icon-button close-modal" data-close="profileModal" aria-label="إغلاق"><i data-lucide="x"></i></button></div><form id="profileForm"><div class="profile-edit-head"><div class="avatar avatar-purple big">س</div><button type="button" class="button button-ghost small-button" data-action="show-toast"><i data-lucide="camera"></i> تغيير الصورة</button></div><div class="form-grid"><label class="field field-full"><span>الاسم الكامل</span><input name="name" value="سارة أحمد" /></label><label class="field field-full"><span>البريد الإلكتروني</span><input name="email" type="email" value="sara@marostore.com" /></label><label class="field field-full"><span>المسمى الوظيفي</span><input name="job" value="مديرة المتجر" /></label></div><div class="modal-foot"><button type="button" class="button button-ghost close-modal" data-close="profileModal">إلغاء</button><button type="submit" class="button button-primary"><i data-lucide="save"></i> حفظ التغييرات</button></div></form></div></div>
+
+  <div class="modal-backdrop" id="confirmModal" aria-hidden="true"><div class="modal confirm-modal" role="dialog" aria-modal="true"><div class="confirm-icon"><i data-lucide="trash-2"></i></div><h2>تأكيد الحذف</h2><p id="confirmText">هل أنت متأكد من حذف هذا العنصر؟ لا يمكن التراجع عن هذه العملية.</p><div class="modal-foot"><button class="button button-ghost close-modal" data-close="confirmModal">إلغاء</button><button class="button button-danger" id="confirmDelete"><i data-lucide="trash-2"></i> نعم، احذف</button></div></div></div>
+
+  <div class="toast" id="toast"><span class="toast-icon"><i data-lucide="check"></i></span><div><strong id="toastTitle">تمت العملية بنجاح</strong><p id="toastMessage">حُفظت التغييرات في لوحة التحكم.</p></div><button class="toast-close" id="toastClose" aria-label="إغلاق"><i data-lucide="x"></i></button></div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
