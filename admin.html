@@ -3,202 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARO | لوحة التحكم الاحترافية</title>
+    <title>MARO | لوحة التحكم</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #0b1120; color: #f8fafc; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .nav-item.active { background: linear-gradient(90deg, rgba(6, 182, 212, 0.15) 0%, transparent 100%); border-right: 4px solid #06b6d4; color: #06b6d4; }
-        .nav-item:hover { background: rgba(255,255,255,0.03); }
+        :root {
+            --canvas: #000000;
+            --surface: #0A0A0A;
+            --ink: #EDEDED;
+            --muted: #A1A1A1;
+            --border: #1A1A1A;
+            --action: #006EFE;
+        }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--canvas); color: var(--ink); }
+        .glass-panel { background-color: var(--surface); border: 1px solid var(--border); }
+        .nav-item.active { background-color: rgba(255,255,255,0.03); border-right: 2px solid var(--action); color: var(--ink); }
+        .nav-item:hover { background-color: rgba(255,255,255,0.02); }
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        .table-row:hover { background: rgba(255,255,255,0.02); }
+        ::-webkit-scrollbar-track { background: var(--canvas); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        .table-row:hover { background-color: rgba(255,255,255,0.02); }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="antialiased h-screen overflow-hidden">
 
-    <!-- Login Screen (Overlay) -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0b1120]">
-        <div class="glass p-8 rounded-2xl w-full max-w-md">
+    <!-- شاشة التحميل -->
+    <div id="global-loader" class="fixed inset-0 z-[100] bg-black flex items-center justify-center">
+        <div class="w-8 h-8 border-2 border-gray-600 border-t-white rounded-full animate-spin"></div>
+    </div>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black p-4">
+        <div class="glass-panel p-8 rounded-xl w-full max-w-sm">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center text-black font-black text-3xl mx-auto mb-4 shadow-lg shadow-cyan-500/30">M</div>
-                <h1 class="text-2xl font-bold">تسجيل الدخول للإدارة</h1>
+                <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-black font-black text-2xl mx-auto mb-4">M</div>
+                <h1 class="text-xl font-bold">تسجيل الدخول</h1>
+                <p class="text-sm text-gray-500 mt-1">أدخل بيانات حساب الأدمن</p>
             </div>
-            <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:border-cyan-500 transition">
-            <input type="password" id="password" placeholder="كلمة المرور" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 mb-6 focus:outline-none focus:border-cyan-500 transition">
-            <button onclick="window.login()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-black font-bold py-3 rounded-xl transition shadow-lg shadow-cyan-500/25">دخول</button>
-            <p id="login-error" class="text-red-400 text-sm mt-4 text-center hidden"></p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">البريد الإلكتروني</label>
+                    <input type="email" id="email" class="w-full bg-[#0A0A0A] border border-[#1A1A1A] rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#006EFE] transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">كلمة المرور</label>
+                    <input type="password" id="password" class="w-full bg-[#0A0A0A] border border-[#1A1A1A] rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#006EFE] transition">
+                </div>
+                <button onclick="handleLogin()" class="w-full bg-white hover:bg-gray-200 text-black font-bold py-2.5 rounded-lg transition text-sm">دخول</button>
+                <p id="login-error" class="text-red-500 text-xs text-center hidden"></p>
+            </div>
         </div>
     </div>
 
-    <!-- Sidebar -->
-    <aside class="w-64 glass h-full flex flex-col hidden md:flex z-20">
-        <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-800">
-            <div class="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center text-black font-black text-lg shadow-lg shadow-cyan-500/30">M</div>
-            <span class="text-xl font-black tracking-wider text-white">MARO<span class="text-cyan-400">.</span></span>
-        </div>
-        <nav class="flex-1 py-6 space-y-2">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-item active w-full flex items-center gap-3 px-6 py-3 text-slate-300 transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="font-bold">نظرة عامة</span>
-            </button>
-            <button onclick="switchTab('orders')" id="btn-orders" class="nav-item w-full flex items-center gap-3 px-6 py-3 text-slate-300 transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                <span class="font-bold">الطلبات</span>
-            </button>
-            <button onclick="switchTab('products')" id="btn-products" class="nav-item w-full flex items-center gap-3 px-6 py-3 text-slate-300 transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                <span class="font-bold">المنتجات</span>
-            </button>
-            <button onclick="window.logout()" class="nav-item w-full flex items-center gap-3 px-6 py-3 text-red-400 hover:bg-red-500/10 transition-all mt-auto">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span class="font-bold">تسجيل الخروج</span>
-            </button>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto bg-[#0b1120] relative">
-        <!-- Header -->
-        <header class="glass sticky top-0 h-20 flex items-center justify-between px-8 z-10">
-            <h2 id="page-title" class="text-xl font-bold text-white">نظرة عامة</h2>
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold">A</div>
+    <!-- محتوى لوحة التحكم -->
+    <div id="admin-content" class="hidden flex h-full">
+        <!-- Sidebar -->
+        <aside class="w-64 glass-panel flex flex-col border-l-0 border-r border-[#1A1A1A]">
+            <div class="h-16 flex items-center px-6 border-b border-[#1A1A1A]">
+                <span class="text-lg font-bold tracking-tight">MARO<span class="text-gray-500">.</span></span>
             </div>
-        </header>
-
-        <!-- Dashboard Tab -->
-        <div id="tab-dashboard" class="p-8">
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Stat Card 1 -->
-                <div class="glass p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="text-slate-400 text-sm font-bold mb-1">إجمالي المبيعات</p>
-                            <h3 class="text-3xl font-black text-white">$<span id="stat-sales">0</span></h3>
-                        </div>
-                        <div class="p-3 bg-cyan-500/20 rounded-xl text-cyan-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-                    </div>
-                    <p class="text-green-400 text-xs font-bold flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg> +12% هذا الشهر</p>
-                </div>
-
-                <!-- Stat Card 2 -->
-                <div class="glass p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="text-slate-400 text-sm font-bold mb-1">الطلبات المكتملة</p>
-                            <h3 class="text-3xl font-black text-white"><span id="stat-orders">0</span></h3>
-                        </div>
-                        <div class="p-3 bg-blue-500/20 rounded-xl text-blue-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
-                    </div>
-                    <p class="text-green-400 text-xs font-bold flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg> +5% هذا الأسبوع</p>
-                </div>
-
-                <!-- Stat Card 3 -->
-                <div class="glass p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="text-slate-400 text-sm font-bold mb-1">إجمالي المنتجات</p>
-                            <h3 class="text-3xl font-black text-white"><span id="stat-products">0</span></h3>
-                        </div>
-                        <div class="p-3 bg-purple-500/20 rounded-xl text-purple-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg></div>
-                    </div>
-                    <p class="text-slate-500 text-xs font-bold">في الكتالوج</p>
-                </div>
-
-                <!-- Stat Card 4 -->
-                <div class="glass p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="text-slate-400 text-sm font-bold mb-1">الأقسام النشطة</p>
-                            <h3 class="text-3xl font-black text-white"><span id="stat-categories">0</span></h3>
-                        </div>
-                        <div class="p-3 bg-orange-500/20 rounded-xl text-orange-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>
-                    </div>
-                    <p class="text-slate-500 text-xs font-bold">تصنيفات المتجر</p>
-                </div>
-            </div>
-
-            <!-- Charts Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <div class="glass p-6 rounded-2xl lg:col-span-2">
-                    <h3 class="text-lg font-bold text-white mb-4">نظرة عامة على المبيعات</h3>
-                    <div class="h-64"><canvas id="salesChart"></canvas></div>
-                </div>
-                <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-white mb-4">توزيع المنتجات</h3>
-                    <div class="h-64 flex justify-center"><canvas id="categoryChart"></canvas></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Products Tab -->
-        <div id="tab-products" class="p-8 hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-white">إدارة المنتجات</h2>
-                <button onclick="openProductModal()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-6 rounded-xl transition shadow-lg shadow-cyan-500/25 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    إضافة منتج
+            <nav class="flex-1 py-4 space-y-1">
+                <button onclick="switchTab('overview')" id="btn-overview" class="nav-item active w-full flex items-center gap-3 px-6 py-2.5 text-sm font-medium text-gray-400 transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    نظرة عامة
                 </button>
-            </div>
-            
-            <div class="glass rounded-2xl overflow-hidden">
-                <table class="w-full text-right">
-                    <thead class="bg-slate-800/50 text-slate-400 text-sm">
-                        <tr>
-                            <th class="p-4 font-bold">المنتج</th>
-                            <th class="p-4 font-bold">القسم</th>
-                            <th class="p-4 font-bold">السعر</th>
-                            <th class="p-4 font-bold">الحالة</th>
-                            <th class="p-4 font-bold">إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="products-table-body" class="text-sm divide-y divide-slate-800">
-                        <!-- JS Populated -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                <button onclick="switchTab('products')" id="btn-products" class="nav-item w-full flex items-center gap-3 px-6 py-2.5 text-sm font-medium text-gray-400 transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    المنتجات
+                </button>
+                <button onclick="logout()" class="nav-item w-full flex items-center gap-3 px-6 py-2.5 text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all mt-auto">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    تسجيل الخروج
+                </button>
+            </nav>
+        </aside>
 
-    </main>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-black p-8">
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-8">
+                <h2 id="page-title" class="text-2xl font-bold tracking-tight">نظرة عامة</h2>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-[#006EFE] flex items-center justify-center text-white text-xs font-bold">AD</div>
+                </div>
+            </header>
 
-    <!-- Product Modal -->
-    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div class="glass w-full max-w-lg p-6 rounded-2xl max-h-[90vh] overflow-y-auto">
-            <h3 id="modal-title" class="text-xl font-bold mb-6 text-white">إضافة منتج جديد</h3>
+            <!-- Overview Tab -->
+            <div id="tab-overview" class="space-y-6">
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-panel p-5 rounded-xl">
+                        <p class="text-xs font-medium text-gray-500 mb-1">إجمالي المبيعات</p>
+                        <h3 class="text-3xl font-bold tracking-tight">$<span id="stat-sales">0</span></h3>
+                    </div>
+                    <div class="glass-panel p-5 rounded-xl">
+                        <p class="text-xs font-medium text-gray-500 mb-1">عدد المنتجات</p>
+                        <h3 class="text-3xl font-bold tracking-tight"><span id="stat-products">0</span></h3>
+                    </div>
+                    <div class="glass-panel p-5 rounded-xl">
+                        <p class="text-xs font-medium text-gray-500 mb-1">الأقسام النشطة</p>
+                        <h3 class="text-3xl font-bold tracking-tight"><span id="stat-categories">0</span></h3>
+                    </div>
+                </div>
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div class="glass-panel p-5 rounded-xl">
+                        <h3 class="text-sm font-bold mb-4">المبيعات</h3>
+                        <div class="h-64"><canvas id="salesChart"></canvas></div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-xl">
+                        <h3 class="text-sm font-bold mb-4">توزيع المنتجات</h3>
+                        <div class="h-64"><canvas id="categoryChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="tab-products" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">المنتجات</h2>
+                    <button onclick="openModal()" class="bg-white hover:bg-gray-200 text-black text-sm font-bold py-2 px-4 rounded-lg transition">إضافة منتج</button>
+                </div>
+                <div class="glass-panel rounded-xl overflow-hidden">
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-[#0A0A0A] border-b border-[#1A1A1A] text-gray-400">
+                            <tr>
+                                <th class="p-4 font-medium">المنتج</th>
+                                <th class="p-4 font-medium">القسم</th>
+                                <th class="p-4 font-medium">السعر</th>
+                                <th class="p-4 font-medium">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body" class="divide-y divide-[#1A1A1A]"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="glass-panel w-full max-w-md p-6 rounded-xl">
+            <h3 id="modal-title" class="text-lg font-bold mb-4">إضافة منتج</h3>
             <input type="hidden" id="prod-id">
             <div class="space-y-4">
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">اسم المنتج</label>
-                    <input type="text" id="prod-name" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
-                </div>
+                <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-black border border-[#1A1A1A] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#006EFE]">
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm text-slate-400 mb-1">السعر ($)</label>
-                        <input type="number" id="prod-price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm text-slate-400 mb-1">القسم</label>
-                        <select id="prod-category" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"></select>
-                    </div>
+                    <input type="number" id="prod-price" placeholder="السعر" class="w-full bg-black border border-[#1A1A1A] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#006EFE]">
+                    <select id="prod-category" class="w-full bg-black border border-[#1A1A1A] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#006EFE]"></select>
                 </div>
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">الوصف</label>
-                    <textarea id="prod-desc" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">صورة المنتج</label>
-                    <input type="file" id="prod-image" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-cyan-500 file:text-black">
-                </div>
+                <textarea id="prod-desc" rows="2" placeholder="الوصف" class="w-full bg-black border border-[#1A1A1A] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#006EFE]"></textarea>
+                <input type="file" id="prod-image" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-white file:text-black">
             </div>
-            <div class="flex justify-end gap-3 mt-8">
-                <button onclick="closeProductModal()" class="px-6 py-2 rounded-lg text-slate-400 hover:text-white transition">إلغاء</button>
-                <button onclick="saveProduct()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-2 rounded-lg transition">حفظ</button>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeModal()" class="text-sm text-gray-400 hover:text-white transition">إلغاء</button>
+                <button onclick="saveProduct()" class="bg-white text-black text-sm font-bold px-6 py-2 rounded-lg transition">حفظ</button>
             </div>
         </div>
     </div>
