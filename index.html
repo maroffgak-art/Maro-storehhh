@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARO | المتجر الرقمي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Cairo', sans-serif; background-color: #0b1120; color: white; }</style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+    <header class="glass sticky top-0 z-50 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center text-black font-black text-xl shadow-lg shadow-cyan-500/30">M</div>
+                <span class="text-2xl font-black tracking-wider">MARO<span class="text-cyan-400">.</span></span>
+            </div>
+            <div class="flex gap-4">
+                <a href="admin.html" class="text-sm font-bold text-cyan-400 hover:text-white transition">لوحة التحكم</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto px-6 py-12 w-full">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-black mb-4">مرحباً بك في المتجر</h1>
+            <p class="text-slate-400">تصفح منتجاتنا الرقمية المختارة بعناية.</p>
+        </div>
+        <div id="store-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- JS Populated -->
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZucoNuZyKDoxfS7tboc3-ZttqONuw_vw",
+            authDomain: "maro-store-4dc09.firebaseapp.com",
+            projectId: "maro-store-4dc09",
+            storageBucket: "maro-store-4dc09.firebasestorage.app",
+            messagingSenderId: "55163169834",
+            appId: "1:55163169834:web:48ba5eda57e23c41886753"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadStore() {
+            const snap = await getDocs(collection(db, "products"));
+            const grid = document.getElementById('store-grid');
+            grid.innerHTML = '';
+            
+            if(snap.empty) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 py-20">لا توجد منتجات متاحة حالياً.</div>';
+                return;
+            }
+
+            snap.forEach(doc => {
+                const p = doc.data();
+                grid.innerHTML += `
+                    <div class="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 group transition hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10">
+                        <div class="h-48 bg-slate-900 overflow-hidden relative">
+                            ${p.image ? `<img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">` : `<div class="w-full h-full flex items-center justify-center text-slate-600">بدون صورة</div>`}
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-2">${p.name}</h3>
+                            <p class="text-slate-400 text-sm mb-4 line-clamp-2">${p.description || ''}</p>
+                            <div class="flex justify-between items-center pt-4 border-t border-slate-700">
+                                <span class="text-xl font-black text-cyan-400">$${p.price}</span>
+                                <button class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-1.5 px-4 rounded-lg transition text-sm">شراء</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        loadStore();
+    </script>
+</body>
+</html>
